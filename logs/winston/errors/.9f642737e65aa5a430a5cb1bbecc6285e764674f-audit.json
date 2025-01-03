@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Projects\\postgres-prisma-starter\\logs\\winston\\errors\\.9f642737e65aa5a430a5cb1bbecc6285e764674f-audit.json",
+    "files": [
+        {
+            "date": 1701622093831,
+            "name": "C:\\Projects\\postgres-prisma-starter\\logs\\winston\\errors\\phu-2023-03-12-22-error.log",
+            "hash": "11856f9ae31118bc3ab7dec057894877dbcd151c16eff88a9e1b2baa5a5df057"
+        }
+    ],
+    "hashType": "sha256"
+}

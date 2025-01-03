@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Job Task\\pomodoro-backend\\logs\\winston\\errors\\.37a605804f96d2410528672a921c3b2db90d8761-audit.json",
+    "files": [
+        {
+            "date": 1735913518282,
+            "name": "C:\\Job Task\\pomodoro-backend\\logs\\winston\\errors\\pomo-2025-03-01-20-error.log",
+            "hash": "7c86e6846903c2b7593fd67e70f4cba5aeed11762dddd7f4a44937e42f4b5cab"
+        }
+    ],
+    "hashType": "sha256"
+}
