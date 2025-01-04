@@ -8,7 +8,7 @@ const createLogFocusSession = catchAsync(
   async (req: Request, res: Response) => {
     try {
       const { ...data } = req.body;
-      console.log(req);
+
       const result = await sessionService.logFocusSession(data);
 
       sendResponse<any>(res, {
@@ -22,8 +22,41 @@ const createLogFocusSession = catchAsync(
     }
   }
 );
+const getFocusMetrcis = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.query;
 
+    const result = await sessionService.getFocusMetrics(userId as string);
+
+    sendResponse<any>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user focus metrics retrived !',
+      data: result,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+const getStreaks = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.query;
+
+    const result = await sessionService.getStreaks(userId as string);
+
+    sendResponse<any>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user streaks retrived !',
+      data: result,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
 
 export const sessionController = {
   createLogFocusSession,
+  getFocusMetrcis,
+  getStreaks,
 };

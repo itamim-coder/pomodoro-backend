@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { NextFunction, Request, Response } from 'express';
-import { authServices } from './auth.service';
+import httpStatus from 'http-status';
 import config from '../../../config';
+import catchAsync from '../../../shared/catchAsync';
+import sendResponse from '../../../shared/sendResponse';
+import { authServices } from './auth.service';
 
 const loginUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -8,19 +12,19 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = await authServices.loginUser(loginData);
     console.log('result', result);
     const { refreshToken } = result;
-    console.log(result);
+    console.log(refreshToken, 'refresh');
 
     res.cookie('refreshToken', refreshToken, {
-      secure: config.env === 'production',
+      secure: config.env === 'development',
       httpOnly: true,
       // sameSite: 'none',
-      maxAge: 31536000000
+      maxAge: 31536000000,
     });
     res.send({
       statusCode: 200,
       success: true,
       message: 'User logged in successfully',
-      data: result
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -74,4 +78,41 @@ const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 //   }
 // };
 
-export const authController = { loginUser };
+const signUp = catchAsync(async (req: Request, res: Response) => {
+  try {
+    const { ...user } = req.body;
+
+    const result = await authServices.signUp(user);
+
+    sendResponse<any>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Users sign up successfully !',
+      data: result,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { refreshToken } = req.cookies;
+    console.log(refreshToken, 'controller');
+    const result = await authServices.refreshToken(refreshToken!);
+
+    res.send({
+      statusCode: 200,
+      success: true,
+      message: 'Token refreshed successfully',
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const authController = { loginUser, signUp, refreshToken };

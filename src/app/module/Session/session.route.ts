@@ -9,6 +9,16 @@ router.post(
   //   validateRequest(authValidation.signin),
   sessionController.createLogFocusSession
 );
+router.get(
+  '/focus-metrics/:id',
+  //   validateRequest(authValidation.signin),
+  sessionController.getFocusMetrcis
+);
+router.get(
+  '/streaks/:id',
+  //   validateRequest(authValidation.signin),
+  sessionController.getStreaks
+);
 // router.post('/google-signin', authController.googleLogin);
 // router.post(
 //   '/refresh-token',
