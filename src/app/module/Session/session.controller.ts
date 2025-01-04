@@ -24,9 +24,7 @@ const createLogFocusSession = catchAsync(
 );
 const getFocusMetrcis = catchAsync(async (req: Request, res: Response) => {
   try {
-    const { userId } = req.query;
-
-    const result = await sessionService.getFocusMetrics(userId as string);
+    const result = await sessionService.getFocusMetrics(req);
 
     sendResponse<any>(res, {
       statusCode: httpStatus.OK,
@@ -40,9 +38,7 @@ const getFocusMetrcis = catchAsync(async (req: Request, res: Response) => {
 });
 const getStreaks = catchAsync(async (req: Request, res: Response) => {
   try {
-    const { userId } = req.query;
-
-    const result = await sessionService.getStreaks(userId as string);
+    const result = await sessionService.getStreaks(req);
 
     sendResponse<any>(res, {
       statusCode: httpStatus.OK,

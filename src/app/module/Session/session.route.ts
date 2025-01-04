@@ -1,4 +1,6 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
 import { sessionController } from './session.controller';
 
 const router = express.Router();
@@ -10,12 +12,14 @@ router.post(
   sessionController.createLogFocusSession
 );
 router.get(
-  '/focus-metrics/:id',
+  '/focus-metrics',
+  auth(ENUM_USER_ROLE.STUDENT),
   //   validateRequest(authValidation.signin),
   sessionController.getFocusMetrcis
 );
 router.get(
-  '/streaks/:id',
+  '/streaks',
+  auth(ENUM_USER_ROLE.STUDENT),
   //   validateRequest(authValidation.signin),
   sessionController.getStreaks
 );

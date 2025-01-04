@@ -81,10 +81,10 @@ const logFocusSession = async (data: {
     throw new Error('Failed to log focus session.');
   }
 };
-const getFocusMetrics = async (userId: string) => {
+const getFocusMetrics = async (authUser: any) => {
   try {
     const focusSessions = await prisma.focusSession.findMany({
-      where: { userId },
+      where: { userId: authUser?.user.userId },
       orderBy: { timestamp: 'desc' },
     });
 
@@ -126,10 +126,11 @@ const getFocusMetrics = async (userId: string) => {
   }
 };
 
-const getStreaks = async (userId: string) => {
+const getStreaks = async (authUser: any) => {
   try {
-    const streak = await prisma.streak.findFirst({
-      where: { userId },
+    // console.log('service', authUser.user);
+    const streak = await prisma.streak.findUnique({
+      where: { userId: authUser?.user.userId },
     });
 
     if (!streak) {

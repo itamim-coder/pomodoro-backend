@@ -1,34 +1,43 @@
-import { NextFunction, Request, Response } from 'express';
+/* eslint-disable no-async-promise-executor */
+import { NextFunction, Response } from 'express';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import config from '../../config';
+
+
+// import { IAuthUser } from '../../interfaces/auth';
 import ApiError from '../../errors/ApiError';
 import { jwtHelpers } from '../../helpers/jwtHelpers';
 
 const auth =
   (...requiredRoles: string[]) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      //get authorization token
+  async (req: any, res: Response, next: NextFunction) => {
+    return new Promise(async (resolve, reject) => {
       const token = req.headers.authorization;
+
       if (!token) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized');
+        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
       }
-      // verify token
-      let verifiedUser = null;
 
-      verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+      const verifiedUser: any = jwtHelpers.verifyToken(
+        token,
+        config.jwt.secret as Secret
+      );
 
-      req.user = verifiedUser; // role  , userid
+      if (!verifiedUser) {
+        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized'));
+      }
 
-      // role diye guard korar jnno
+      req.user = verifiedUser;
+      console.log('auth', req.user);
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden');
+        return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
       }
-      next();
-    } catch (error) {
-      next(error);
-    }
+
+      resolve(verifiedUser);
+    })
+      .then(() => next())
+      .catch(err => next(err));
   };
 
 export default auth;
